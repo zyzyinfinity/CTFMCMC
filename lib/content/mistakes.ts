@@ -69,7 +69,7 @@ export const mistakes: MistakeEntry[] = [
     tags: ["sudo", "password prompt", "privilege escalation"],
     symptom: "sudo -l asks for a password even though you expected NOPASSWD.",
     likelyCause: "NOPASSWD only applies to specific commands/users in sudoers, not globally; you may be the wrong user.",
-    verify: "whoami; cat /etc/sudoers 2>/dev/null or /etc/sudoers.d/* if readable.",
+    verify: "whoami; cat /etc/sudoers 2>/dev/null; cat /etc/sudoers.d/* 2>/dev/null",
     correctCommand: "sudo -l   # re-check as the exact intended user, with any password you've since obtained",
     recovery: "Supply a cracked/found password if available; otherwise move to SUID/cron/capabilities checks.",
     avoid: "Don't assume a sudo prompt is a dead end — confirm scope by reading sudoers if possible.",

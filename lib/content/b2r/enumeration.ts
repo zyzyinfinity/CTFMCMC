@@ -72,8 +72,8 @@ export const enumerationTechniques: Technique[] = [
         nextStep: "Download everything of interest, then grep for 'password', 'pass', 'user', 'key' across all pulled files.",
       },
       {
-        syntax: "grep -riE \"password|passwd|secret|api_key\" . -r",
-        example: "grep -riE \"password|passwd|secret|api_key\" ./loot -r",
+        syntax: "grep -riE \"password|passwd|secret|api_key\" .",
+        example: "grep -riE \"password|passwd|secret|api_key\" ./loot",
         description: "Searches every file pulled from web/SMB/FTP (or read via LFI) for plaintext credential keywords — the actual harvesting step.",
         flags: [],
         whenToUse: "Immediately after pulling any files or gaining any read access (LFI, share, anon FTP, post-shell).",

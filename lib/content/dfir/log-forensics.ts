@@ -25,7 +25,7 @@ export const logForensicsTechniques: Technique[] = [
         whenToUse: "Standard first query against any auth.log for brute-force indicators.",
         expectedOutput: "Mar 11 14:01:02 host sshd[1234]: Failed password for root from 203.0.113.9 port 51820 ssh2",
         lookFor: "A high volume of attempts from one IP in a short time window; attempts against multiple usernames (spraying) vs one username (brute-force).",
-        nextStep: "Count attempts per source IP: grep 'Failed password' auth.log | awk '{print $11}' | sort | uniq -c | sort -rn.",
+        nextStep: "Count attempts per source IP: grep 'Failed password' auth.log | awk '{print $11}' | sort | uniq -c | sort -rn. ($11 holds the IP only for 'Failed password for USER from IP'; for 'Failed password for invalid user USER from IP' it is $13.)",
       },
       {
         syntax: "grep 'Accepted password\\|Accepted publickey' FILE_PATH",

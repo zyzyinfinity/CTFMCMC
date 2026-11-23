@@ -49,7 +49,7 @@ export const credentialAttacksTechniques: Technique[] = [
         ],
         whenToUse: "When John is too slow, or a GPU is available and the job is large.",
         expectedOutput: "5f4dcc3b5aa765d61d8327deb882cf99:password",
-        lookFor: "hash:plaintext pairs in the output / hashcat --show.",
+        lookFor: "hash:plaintext pairs in the output / hashcat -m MODE hash.txt --show.",
         nextStep: "Try the recovered password against the relevant service/account.",
       },
       {
