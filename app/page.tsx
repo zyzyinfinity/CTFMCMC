@@ -57,7 +57,17 @@ export default function Home() {
         </section>
       </div>
 
-      <section className="mt-6">
+      <section className="mt-6 grid gap-3 sm:grid-cols-2">
+        <Link
+          href="/b2r/enumeration/ip-only-to-credentials"
+          className="block rounded-md border p-4 text-center hover:border-[var(--accent)] transition-colors"
+          style={{ borderColor: "var(--border)" }}
+        >
+          <span className="font-medium">IP-Only → Credentials Playbook →</span>
+          <p className="mt-1 text-sm text-[var(--text-dim)]">
+            Only given a target IP? Step-by-step: scan, enumerate, exploit, harvest and crack credentials.
+          </p>
+        </Link>
         <Link
           href="/mistakes"
           className="block rounded-md border p-4 text-center hover:border-[var(--accent)] transition-colors"

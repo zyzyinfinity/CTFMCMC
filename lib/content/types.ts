@@ -69,6 +69,8 @@ export interface Technique {
     suspicious?: string[];
     falsePositives?: string[];
     howToValidate: string[];
+    /** Per-port quick-reference notes (port/service -> what to check/try). */
+    portNotes?: { port: string; note: string }[];
   };
   nextStep: string[];
   troubleshooting: TroubleshootingEntry[];

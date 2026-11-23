@@ -67,3 +67,19 @@ This is a living knowledge base. Phase 1–3 scaffolding (search, navigation, te
 - `npm run build` — passes (TypeScript strict, ESLint clean).
 - `npm run start` — homepage, a B2R technique, a DFIR technique, a mistake entry, and an unknown route (404) all verified responding correctly.
 - All content pages are statically prerendered (`generateStaticParams`) for offline reliability.
+
+## Offline CTF mode (static, Kali/Linux)
+
+Requires `python3` (runtime) and `node`/`npm` only for the first build. The deployed site/config is unchanged (static export is enabled only via `STATIC_EXPORT=1`).
+
+```bash
+./start-ctf.sh            # builds out-build/ if missing; serves 127.0.0.1 on first free port 4300-4399
+./start-ctf.sh --lan      # bind 0.0.0.0 for access from another machine
+./start-ctf.sh --rebuild  # force rebuild
+./stop-ctf.sh
+```
+
+- Re-running start prints the existing URL (no duplicate instance).
+- LAN: run with `--lan`, find IP via `ip a`, open `http://<LAN-IP>:<port>/` from the other machine. Same network and firewall must allow the port. Unauthenticated; use only on a trusted/isolated CTF network, never forward the port.
+- Portable: after one build, copy `out-build/` anywhere and run `python3 -m http.server 4300 --bind 127.0.0.1 --directory out-build` (no Node needed).
+- Fonts are self-hosted at build time; no runtime external requests.

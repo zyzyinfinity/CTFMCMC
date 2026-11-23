@@ -186,6 +186,20 @@ export default function TechniqueView({ technique }: { technique: Technique }) {
 
       <Section title="Findings & Interpretation">
         <div className="space-y-3 text-sm">
+          {technique.findings.portNotes && technique.findings.portNotes.length > 0 && (
+            <div>
+              <p className="mb-1 font-medium text-[var(--text-dim)]">Port Notes</p>
+              <ul className="space-y-1">
+                {technique.findings.portNotes.map((p, i) => (
+                  <li key={i}>
+                    <span className="font-mono text-[var(--accent)]">{p.port}</span>
+                    <span className="text-[var(--text-faint)]"> — </span>
+                    {p.note}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div>
             <p className="mb-1 font-medium text-[var(--ok)]">Interesting</p>
             <ul className="list-inside list-disc space-y-0.5">
