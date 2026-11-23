@@ -105,7 +105,7 @@ export const enumerationTechniques: Technique[] = [
         purpose: "Offline password cracking against harvested hashes.",
         whenToUse: "After pulling any hash from a shadow file, DB dump, memory image, or network capture.",
         install: "sudo apt install hashcat john",
-        usage: "hashcat -m MODE -a 0 hash.txt wordlist.txt",
+        usage: "hashcat -m MODE -a 0 hash.txt /usr/share/wordlists/rockyou.txt",
         exampleWorkflow: "hashid identifies mode -> hashcat/john cracks -> test credential for reuse.",
       },
     ],
@@ -192,6 +192,16 @@ export const enumerationTechniques: Technique[] = [
         nextStep: "Run a full-port scan in parallel; begin manual enumeration of each service found here.",
       },
       {
+        syntax: "searchsploit SERVICE VERSION",
+        example: "searchsploit apache 2.4.49",
+        description: "Searches the local exploit-db mirror for known exploits matching the exact service/version identified by the -sC -sV scan. This replaces CVE lookups in the competition, since neither Google nor AI is allowed during play.",
+        flags: [],
+        whenToUse: "Check for known exploits before trying manual techniques.",
+        expectedOutput: "Exploit Title                                    | Path\n------------------------------------------------- | ----\nApache 2.4.49 - Path Traversal & RCE              | multiple/webapps/50383.py",
+        lookFor: "A matching version-specific exploit; mismatched versions in results are false leads, confirm the exact version string matches.",
+        nextStep: "searchsploit -m PATH to copy a promising exploit locally, then read it fully before running it.",
+      },
+      {
         syntax: "nmap -p- --min-rate=1000 -oN FILE_PATH TARGET_IP",
         example: "nmap -p- --min-rate=1000 -oN full-tcp.nmap 10.10.11.25",
         description: "Scans all 65535 TCP ports, sending packets fast, to avoid missing high ports.",
@@ -217,16 +227,6 @@ export const enumerationTechniques: Technique[] = [
         expectedOutput: "161/udp open  snmp",
         lookFor: "open|filtered is ambiguous on UDP; open (confirmed) is the signal to investigate.",
         nextStep: "Enumerate the specific UDP service (e.g. snmpwalk for SNMP).",
-      },
-      {
-        syntax: "searchsploit SERVICE VERSION",
-        example: "searchsploit apache 2.4.49",
-        description: "Searches the local exploit-db mirror for known exploits matching the exact service/version identified by the -sC -sV scan. This replaces CVE lookups in the competition, since neither Google nor AI is allowed during play.",
-        flags: [],
-        whenToUse: "Immediately after the version/script scan identifies exact software versions — before trying anything manual.",
-        expectedOutput: "Exploit Title                                    | Path\n------------------------------------------------- | ----\nApache 2.4.49 - Path Traversal & RCE              | multiple/webapps/50383.py",
-        lookFor: "A matching version-specific exploit; mismatched versions in results are false leads, confirm the exact version string matches.",
-        nextStep: "searchsploit -m PATH to copy a promising exploit locally, then read it fully before running it.",
       },
       {
         syntax: "nmap --script=vuln -p PORTS TARGET_IP",
@@ -461,7 +461,7 @@ export const enumerationTechniques: Technique[] = [
     },
     nextStep: [
       "Download and grep every reachable file for 'password', 'pwd', connection strings.",
-      "Next step: once you have valid SMB credentials (found in a share, cracked, or leaked), try them against SSH, FTP, and any web login found earlier before assuming the share itself holds the flag — credential reuse across services is extremely common on these boxes.",
+      "Feed discovered usernames into SSH/FTP/credential attacks. If a username+password pair was found (not just a username), try it against SSH, FTP, and any web login before assuming the share itself holds the flag.",
     ],
     troubleshooting: [
       {
