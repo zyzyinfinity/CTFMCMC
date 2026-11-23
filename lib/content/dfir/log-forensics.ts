@@ -1,0 +1,106 @@
+import { Technique } from "../types";
+
+export const logForensicsTechniques: Technique[] = [
+  {
+    slug: "linux-auth-log-analysis",
+    section: "dfir",
+    category: "log-forensics",
+    title: "Linux Authentication Log Analysis",
+    tags: ["auth.log", "journalctl", "ssh", "failed login", "brute force", "sudo log", "grep", "awk"],
+    concept:
+      "Linux authentication events (SSH logins, sudo usage, su attempts) are recorded in /var/log/auth.log (Debian/Ubuntu) or via journalctl (systemd). Reviewing them reveals brute-force attempts, successful unauthorized logins, and privilege-escalation traces.",
+    whenToUse: ["Investigating suspected unauthorized access on a Linux host.", "Challenge provides auth.log/journalctl export as evidence."],
+    workflow: [
+      { label: "Search for failed login patterns", detail: "Volume/frequency suggests brute-forcing." },
+      { label: "Find successful logins", detail: "Correlate timing with failures to spot a successful brute-force." },
+      { label: "Review sudo/su usage", detail: "Privilege escalation traces." },
+      { label: "Build a timeline", detail: "Correlate with other evidence (network, filesystem)." },
+    ],
+    commands: [
+      {
+        syntax: "grep 'Failed password' FILE_PATH",
+        example: "grep 'Failed password' auth.log",
+        description: "Lists every failed SSH password attempt recorded in the log.",
+        flags: [],
+        whenToUse: "Standard first query against any auth.log for brute-force indicators.",
+        expectedOutput: "Mar 11 14:01:02 host sshd[1234]: Failed password for root from 203.0.113.9 port 51820 ssh2",
+        lookFor: "A high volume of attempts from one IP in a short time window; attempts against multiple usernames (spraying) vs one username (brute-force).",
+        nextStep: "Count attempts per source IP: grep 'Failed password' auth.log | awk '{print $11}' | sort | uniq -c | sort -rn.",
+      },
+      {
+        syntax: "grep 'Accepted password\\|Accepted publickey' FILE_PATH",
+        example: "grep 'Accepted password\\|Accepted publickey' auth.log",
+        description: "Lists successful SSH authentications.",
+        flags: [],
+        whenToUse: "To find whether a brute-force run ended in a successful login, and when.",
+        expectedOutput: "Mar 11 14:03:45 host sshd[1240]: Accepted password for root from 203.0.113.9 port 51830 ssh2",
+        lookFor: "A success immediately following a string of failures from the same IP — confirms a successful brute-force.",
+        nextStep: "Note the exact timestamp as the compromise time; check what that session did next (sudo log, shell history if available).",
+      },
+      {
+        syntax: "grep 'sudo:' FILE_PATH",
+        example: "grep 'sudo:' auth.log",
+        description: "Lists every sudo invocation recorded, including the command run.",
+        flags: [],
+        whenToUse: "After confirming a login, to see if/how the attacker escalated privileges.",
+        expectedOutput: "Mar 11 14:05:10 host sudo: ctfuser : TTY=pts/0 ; PWD=/home/ctfuser ; USER=root ; COMMAND=/bin/bash",
+        lookFor: "Commands run as root shortly after a suspicious login.",
+        nextStep: "Add this to the incident timeline; this is often the privilege-escalation moment.",
+      },
+      {
+        syntax: "journalctl -u ssh.service --since 'DATE' --until 'DATE'",
+        example: "journalctl -u ssh.service --since '2024-03-11 14:00' --until '2024-03-11 15:00'",
+        description: "On systemd-based systems without a flat auth.log file, queries the SSH service's journal for a specific time window.",
+        flags: [
+          { flag: "-u", explanation: "Filter to a specific systemd unit (service)." },
+          { flag: "--since / --until", explanation: "Time window bounds." },
+        ],
+        whenToUse: "When the evidence is a systemd journal (binary format) rather than a plain-text auth.log.",
+        expectedOutput: "Same style of SSH login events as auth.log, scoped to the given window.",
+        lookFor: "Same patterns as above: failed/accepted logins, timing clusters.",
+        nextStep: "Narrow the time window further once a suspicious cluster is found.",
+      },
+    ],
+    tools: [
+      {
+        name: "grep / awk",
+        purpose: "Fast, scriptable text filtering and field extraction — sufficient for most single-host log review.",
+        whenToUse: "Default tools for a flat-file log of manageable size.",
+        usage: "grep 'pattern' FILE_PATH | awk '{print $FIELD}'",
+        exampleWorkflow: "grep to isolate event type -> awk to pull the source IP/field -> sort/uniq -c to count.",
+      },
+      {
+        name: "journalctl",
+        purpose: "Query systemd's structured journal logs by unit, time range, priority.",
+        whenToUse: "Modern systemd-based distros where logs aren't plain auth.log files.",
+        usage: "journalctl -u UNIT --since TIME",
+        exampleWorkflow: "Narrow by unit and time window to the incident period before reading in detail.",
+      },
+      {
+        name: "Plaso / log2timeline",
+        purpose: "Builds a unified, sortable timeline (a 'super timeline') from many different log/artifact sources at once.",
+        whenToUse: "When correlating multiple log sources (auth, filesystem, browser, etc.) across a larger investigation.",
+        install: "pip install plaso (or use a prebuilt environment such as a Plaso/Timesketch container)",
+        usage: "log2timeline.py OUTPUT.plaso EVIDENCE_SOURCE",
+        exampleWorkflow: "log2timeline to parse -> psort.py to filter/export the combined timeline -> review in Timesketch.",
+      },
+    ],
+    findings: {
+      interesting: ["A successful login immediately after a burst of failures from the same IP", "sudo commands run moments after an unfamiliar login session starts"],
+      suspicious: ["Logins at times inconsistent with the legitimate user's normal pattern (if a baseline is known)"],
+      falsePositives: ["Legitimate automated jobs/scripts using sudo regularly are normal — compare against a baseline before flagging"],
+      howToValidate: ["Correlate the suspicious login's source IP/timing against other evidence (pcap, memory image) before concluding it's the actual intrusion vector"],
+    },
+    nextStep: ["Feed the confirmed compromise timestamp and source IP into the Incident Response timeline/IOC list."],
+    troubleshooting: [
+      {
+        symptom: "grep finds no 'Failed password' lines at all.",
+        likelyCause: "Wrong log file for this distro/auth method, log rotation moved older events to a .gz file, or SSH uses key-only auth (no password attempts logged that way).",
+        verify: "ls -la /var/log/auth.log* to check for rotated/compressed older logs; confirm the SSH config's auth methods.",
+        fix: "zgrep 'Failed password' auth.log.1.gz to search rotated/compressed logs too.",
+        recovery: "Check for PAM-related failure messages instead if password auth isn't the relevant vector.",
+        avoid: "Always check for log rotation before concluding an event never happened.",
+      },
+    ],
+  },
+];
