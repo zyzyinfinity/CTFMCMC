@@ -1,12 +1,12 @@
 import { CategoryMeta, Section } from "./types";
 
 export const b2rCategories: CategoryMeta[] = [
-  { slug: "enumeration", title: "Information Gathering & Enumeration", description: "Host discovery, port/service scanning, and surface mapping." },
-  { slug: "web-exploitation", title: "Web Exploitation", description: "LFI/RFI, injection, upload abuse, and CMS/app-layer attacks." },
-  { slug: "initial-access", title: "Initial Access & Foothold", description: "Turning a vulnerability into a shell, and stabilizing it." },
-  { slug: "privesc-linux", title: "Linux Privilege Escalation", description: "SUID/SGID, sudo, cron, capabilities, kernel, and more." },
-  { slug: "credential-attacks", title: "Password & Credential Attacks", description: "Hash identification, cracking, and credential reuse." },
-  { slug: "other-b2r", title: "Other B2R Topics", description: "FTP/SMB/DB exploitation, pivoting, Docker, Windows basics." },
+  { slug: "enumeration", title: "1. Information Gathering & Enumeration", description: "Host discovery, port/service scanning, and surface mapping." },
+  { slug: "web-exploitation", title: "2. Web Exploitation", description: "LFI/RFI, injection, upload abuse, and CMS/app-layer attacks." },
+  { slug: "initial-access", title: "3. Initial Access & Foothold", description: "Turning a vulnerability into a shell, and stabilizing it." },
+  { slug: "privesc-linux", title: "4. Linux Privilege Escalation", description: "SUID/SGID, sudo, cron, capabilities, kernel, and more." },
+  { slug: "credential-attacks", title: "5. Password & Credential Attacks", description: "Hash identification, cracking, and credential reuse." },
+  { slug: "other-b2r", title: "6. Other B2R Topics", description: "FTP/SMB/DB exploitation, pivoting, Docker, Windows basics." },
 ];
 
 export const dfirCategories: CategoryMeta[] = [

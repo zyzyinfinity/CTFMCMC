@@ -14,7 +14,7 @@ export const credentialAttacksTechniques: Technique[] = [
     ],
     workflow: [
       { label: "Identify the hash format", detail: "Length, prefix, charset give strong hints." },
-      { label: "Choose wordlist and tool", detail: "rockyou.txt is the default CTF wordlist." },
+      { label: "Choose wordlist and tool", detail: "/usr/share/wordlists/rockyou.txt is the default CTF wordlist." },
       { label: "Run the cracking tool", detail: "John for CPU/varied formats, Hashcat for GPU speed." },
       { label: "Validate the recovered password", detail: "Try it against the actual service (SSH, login form)." },
     ],
@@ -60,7 +60,7 @@ export const credentialAttacksTechniques: Technique[] = [
         whenToUse: "When you have a password-protected archive or an encrypted SSH private key, not a raw hash.",
         expectedOutput: "id_rsa:$sshng$1$...",
         lookFor: "A valid hash line produced; then feed it to john normally.",
-        nextStep: "john --wordlist=rockyou.txt hash.txt, then use the cracked passphrase to decrypt the key.",
+        nextStep: "john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt, then use the cracked passphrase to decrypt the key.",
       },
     ],
     tools: [

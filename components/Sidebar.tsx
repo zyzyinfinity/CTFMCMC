@@ -9,6 +9,10 @@ function SectionGroup({ section, label }: { section: Section; label: string }) {
   const pathname = usePathname();
   const categories = section === "b2r" ? b2rCategories : dfirCategories;
   const sectionActive = pathname?.startsWith(`/${section}`);
+  const flagship = section === "b2r"
+    ? { href: "/b2r/zero-to-root", label: "⚡ Zero to Root" }
+    : { href: "/dfir/file-to-flag", label: "📄 File to Flag" };
+  const flagshipActive = pathname === flagship.href;
 
   return (
     <details open={!!sectionActive} className="group">
@@ -18,6 +22,16 @@ function SectionGroup({ section, label }: { section: Section; label: string }) {
         </Link>
         <span className="transition-transform group-open:rotate-90 text-[var(--text-faint)]">▸</span>
       </summary>
+      <div className="mt-0.5 pl-2">
+        <Link
+          href={flagship.href}
+          className={`block rounded px-2 py-1 text-[13px] font-medium ${
+            flagshipActive ? "text-[var(--accent)]" : "text-[var(--accent)] hover:bg-[var(--bg-hover)]"
+          }`}
+        >
+          {flagship.label}
+        </Link>
+      </div>
       <ul className="mt-0.5 space-y-0.5 pl-2">
         {categories.map((cat) => {
           const techniques = techniquesForCategory(section, cat.slug);
@@ -64,6 +78,7 @@ function SectionGroup({ section, label }: { section: Section; label: string }) {
 export default function Sidebar() {
   const pathname = usePathname();
   const mistakesActive = pathname?.startsWith("/mistakes");
+  const playbookActive = pathname === "/b2r/when-the-playbook-doesnt-work";
 
   return (
     <nav className="flex h-full flex-col gap-1 overflow-y-auto p-3 text-sm">
@@ -77,6 +92,14 @@ export default function Sidebar() {
           }`}
         >
           Command Mistakes & Recovery
+        </Link>
+        <Link
+          href="/b2r/when-the-playbook-doesnt-work"
+          className={`block rounded px-2 py-1.5 text-xs font-semibold uppercase tracking-wide hover:bg-[var(--bg-hover)] ${
+            playbookActive ? "text-[var(--accent)]" : "text-[var(--text-dim)] hover:text-[var(--text)]"
+          }`}
+        >
+          When the Playbook Doesn&apos;t Work
         </Link>
       </div>
     </nav>

@@ -75,6 +75,7 @@ export default function TechniqueView({ technique }: { technique: Technique }) {
         </ol>
       </Section>
 
+      {technique.commands.length > 0 && (
       <Section title="Commands">
         <div className="space-y-5">
           {technique.commands.map((cmd, i) => (
@@ -108,15 +109,17 @@ export default function TechniqueView({ technique }: { technique: Technique }) {
                   {cmd.whenToUse}
                 </p>
                 {cmd.expectedOutput && (
-                  <div>
-                    <p className="mb-1 text-[var(--text-faint)]">Expected output:</p>
+                  <details className="group">
+                    <summary className="cursor-pointer text-[var(--text-faint)] select-none">
+                      <span className="inline-block transition-transform group-open:rotate-90">▶️</span> Expected output
+                    </summary>
                     <pre
-                      className="overflow-x-auto whitespace-pre-wrap rounded p-2 text-[12px] text-[var(--text-dim)]"
+                      className="mt-1 overflow-x-auto whitespace-pre-wrap rounded p-2 text-[12px] text-[var(--text-dim)]"
                       style={{ background: "var(--code-bg)" }}
                     >
                       {cmd.expectedOutput}
                     </pre>
-                  </div>
+                  </details>
                 )}
                 {cmd.lookFor && (
                   <p>
@@ -133,6 +136,7 @@ export default function TechniqueView({ technique }: { technique: Technique }) {
           ))}
         </div>
       </Section>
+      )}
 
       {technique.tools.length > 0 && (
         <Section title="Tools">

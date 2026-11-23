@@ -82,7 +82,7 @@ export const enumerationTechniques: Technique[] = [
         nextStep: "Try every found credential against SSH, the web login, SMB, and sudo -l on the current shell.",
       },
       {
-        syntax: "hashid 'HASH'  &&  hashcat -m MODE -a 0 hash.txt rockyou.txt",
+        syntax: "hashid 'HASH'  &&  hashcat -m MODE -a 0 hash.txt /usr/share/wordlists/rockyou.txt",
         example: "hashid '$6$rounds=5000$...'  &&  hashcat -m 1800 -a 0 hash.txt /usr/share/wordlists/rockyou.txt",
         description: "Identifies a harvested hash's type then cracks it offline — turns a hash (shadow file, DB dump, memory) into a usable password.",
         flags: [{ flag: "-m MODE", explanation: "Hash-type mode id from hashid/hashcat's reference table." }],
@@ -217,6 +217,16 @@ export const enumerationTechniques: Technique[] = [
         expectedOutput: "161/udp open  snmp",
         lookFor: "open|filtered is ambiguous on UDP; open (confirmed) is the signal to investigate.",
         nextStep: "Enumerate the specific UDP service (e.g. snmpwalk for SNMP).",
+      },
+      {
+        syntax: "searchsploit SERVICE VERSION",
+        example: "searchsploit apache 2.4.49",
+        description: "Searches the local exploit-db mirror for known exploits matching the exact service/version identified by the -sC -sV scan. This replaces CVE lookups in the competition, since neither Google nor AI is allowed during play.",
+        flags: [],
+        whenToUse: "Immediately after the version/script scan identifies exact software versions — before trying anything manual.",
+        expectedOutput: "Exploit Title                                    | Path\n------------------------------------------------- | ----\nApache 2.4.49 - Path Traversal & RCE              | multiple/webapps/50383.py",
+        lookFor: "A matching version-specific exploit; mismatched versions in results are false leads, confirm the exact version string matches.",
+        nextStep: "searchsploit -m PATH to copy a promising exploit locally, then read it fully before running it.",
       },
       {
         syntax: "nmap --script=vuln -p PORTS TARGET_IP",
@@ -451,7 +461,7 @@ export const enumerationTechniques: Technique[] = [
     },
     nextStep: [
       "Download and grep every reachable file for 'password', 'pwd', connection strings.",
-      "Feed discovered usernames into SSH/FTP/credential attacks.",
+      "Next step: once you have valid SMB credentials (found in a share, cracked, or leaked), try them against SSH, FTP, and any web login found earlier before assuming the share itself holds the flag — credential reuse across services is extremely common on these boxes.",
     ],
     troubleshooting: [
       {

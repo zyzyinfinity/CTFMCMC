@@ -257,4 +257,55 @@ export const fileForensicsTechniques: Technique[] = [
       },
     ],
   },
+  {
+    slug: "audio-steganography",
+    section: "dfir",
+    category: "file-forensics",
+    title: "Audio Steganography",
+    tags: ["audio", "steganography", "wav", "mp3", "sonic visualiser", "audacity", "spectrogram", "morse", "dtmf"],
+    concept:
+      "Audio files can hide data visually (text/images drawn into the frequency spectrum, visible only in a spectrogram) or audibly (Morse code or DTMF tones encoded in the waveform's timing/pitch). Both require GUI spectral/waveform tools rather than a single CLI command — there's no 'strings for audio'.",
+    whenToUse: ["Challenge provides a WAV/MP3/audio file.", "file/exiftool/strings on the audio file are clean but the challenge implies hidden data."],
+    workflow: [
+      { label: "Run the universal file-forensics first pass", detail: "file, sha256sum, exiftool, strings — same as any artifact, before opening audio tools." },
+      { label: "Open in Sonic Visualiser for a spectrogram view", detail: "Visually-hidden text/images drawn into the frequency domain show up here." },
+      { label: "Open in Audacity for the waveform", detail: "Morse code or DTMF tones are often visible as timed pulses or distinct tone pairs." },
+      { label: "Decode whatever pattern is found", detail: "Morse by ear/pattern, DTMF by tone-pair lookup, or read text directly off the spectrogram." },
+    ],
+    commands: [],
+    tools: [
+      {
+        name: "Sonic Visualiser",
+        purpose: "GUI spectral analysis tool — renders a spectrogram (frequency over time) of the audio.",
+        whenToUse: "Default first stop for any audio file suspected of stego; many CTF challenges hide a QR code, image, or readable text directly in the frequency spectrum.",
+        install: "sudo apt install sonic-visualiser",
+        usage: "Open the file, add a Spectrogram layer (Layer > Add Spectrogram), then tune the window size/colormap until any hidden pattern becomes legible.",
+        exampleWorkflow: "Open file -> Layer > Add Spectrogram -> adjust window size and frequency range (Pane properties) -> scan the full timeline for text/shapes drawn into the spectrum.",
+      },
+      {
+        name: "Audacity",
+        purpose: "GUI waveform editor/analyzer — for timing-based encodings (Morse) and tone-based encodings (DTMF), and as a secondary spectrogram view.",
+        whenToUse: "When the hint points at Morse code (short/long pulses) or DTMF (telephone keypad tones), or to zoom into the waveform for timing analysis.",
+        install: "sudo apt install audacity",
+        usage: "Open the file; switch the track's display to Spectrogram (click the track name dropdown) for a second spectral view, or stay on Waveform and zoom in to read pulse timing by eye/ear.",
+        exampleWorkflow: "Open file -> zoom into the waveform -> measure pulse lengths (short vs long = dot vs dash) -> transcribe Morse by hand, or identify DTMF tone pairs via Audacity's frequency analysis (Analyze > Plot Spectrum) and look up each pair against a standard DTMF frequency table.",
+      },
+    ],
+    findings: {
+      interesting: ["Readable text or a QR-code-like pattern visible in the spectrogram", "A regular pulse pattern that transcribes cleanly to Morse code", "Distinct paired-tone bursts matching the DTMF frequency table"],
+      falsePositives: ["Normal music/speech audio has plenty of visual texture in a spectrogram — only trust a pattern that reads as deliberate (straight lines, clean text shapes, a QR grid), not generic spectral noise"],
+      howToValidate: ["A decoded message/QR code should be coherent on its own — if Morse/DTMF decoding produces gibberish, re-check pulse-length thresholds or tone-pair readings before concluding nothing is there"],
+    },
+    nextStep: ["If the spectrogram/waveform is clean, re-check Step 1's exiftool/strings output for a missed clue, or treat any decoded text/QR content as new evidence and continue from there."],
+    troubleshooting: [
+      {
+        symptom: "The spectrogram in Sonic Visualiser just looks like noise, nothing readable.",
+        likelyCause: "Wrong window size/colormap for the hidden content's frequency range, or the hiding method is actually Morse/DTMF (waveform-based), not spectral.",
+        verify: "Try a few different window sizes and colormaps in the Spectrogram layer's properties; also check Audacity's waveform for an obvious pulse pattern.",
+        fix: "Switch tools/approach: if spectral shows nothing, check the waveform for timing-based encoding instead, and vice versa.",
+        recovery: "Re-run the universal strings/exiftool pass — some challenges layer a text/base64 hint in metadata pointing at which technique to use.",
+        avoid: "Don't assume one tool covers both hiding methods — spectral (Sonic Visualiser) and timing/tone (Audacity) are genuinely different techniques.",
+      },
+    ],
+  },
 ];

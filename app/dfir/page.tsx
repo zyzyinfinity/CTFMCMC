@@ -8,9 +8,23 @@ export default function DfirOverview() {
   return (
     <div className="max-w-3xl">
       <h1 className="mb-2 text-xl font-semibold">Digital Forensics & Incident Response</h1>
-      <p className="mb-6 text-sm text-[var(--text-dim)]">
+      <p className="mb-4 text-sm text-[var(--text-dim)]">
         Evidence-preserving investigation methodology: identify, extract, interpret, and correlate artifacts.
       </p>
+
+      <Link
+        href="/dfir/file-to-flag"
+        className="mb-6 block rounded-md border-2 p-4 transition-colors hover:border-[var(--accent)]"
+        style={{ borderColor: "var(--accent)" }}
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="font-semibold text-[var(--accent)]">📄 File to Flag — Full Walkthrough</h2>
+          <span className="text-xs text-[var(--text-faint)]">start here →</span>
+        </div>
+        <p className="mt-0.5 text-sm text-[var(--text-dim)]">
+          Universal first moves for any artifact, then one fully-worked image-steganography chain, with condensed branches to every other evidence type.
+        </p>
+      </Link>
 
       <div className="mb-8">
         <Flowchart
