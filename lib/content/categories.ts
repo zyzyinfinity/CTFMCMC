@@ -5,8 +5,9 @@ export const b2rCategories: CategoryMeta[] = [
   { slug: "web-exploitation", title: "2. Web Exploitation", description: "LFI/RFI, injection, upload abuse, and CMS/app-layer attacks." },
   { slug: "initial-access", title: "3. Initial Access & Foothold", description: "Turning a vulnerability into a shell, and stabilizing it." },
   { slug: "privesc-linux", title: "4. Linux Privilege Escalation", description: "SUID/SGID, sudo, cron, capabilities, kernel, and more." },
-  { slug: "credential-attacks", title: "5. Password & Credential Attacks", description: "Hash identification, cracking, and credential reuse." },
-  { slug: "other-b2r", title: "6. Other B2R Topics", description: "FTP/SMB/DB exploitation, pivoting, Docker, Windows basics." },
+  { slug: "privesc-windows", title: "5. Windows Privilege Escalation", description: "Token privileges, service/registry misconfig, AlwaysInstallElevated, scheduled tasks, and credential hunting." },
+  { slug: "credential-attacks", title: "6. Password & Credential Attacks", description: "Hash identification, cracking, and credential reuse." },
+  { slug: "other-b2r", title: "7. Other B2R Topics", description: "FTP/SMB/DB exploitation, pivoting, Docker, Windows basics." },
 ];
 
 export const dfirCategories: CategoryMeta[] = [

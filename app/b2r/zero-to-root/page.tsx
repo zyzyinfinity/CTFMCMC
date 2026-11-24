@@ -41,7 +41,7 @@ export default function ZeroToRoot() {
           expectedOutput={"22/tcp open  ssh   OpenSSH 8.9p1\n80/tcp open  http  Apache httpd 2.4.52\n|_http-title: Welcome"}
           next={
             <>
-              Web port found → Step 4. SMB (445) found → jump to the{" "}
+              Run Step 3b, then: web port found → Step 4. SMB (445) found → jump to the{" "}
               <a href="#smb-first-path" className="text-[var(--accent)] hover:underline">SMB-first path</a> below.
               Neither → see{" "}
               <Link href="/b2r/other-b2r" className="text-[var(--accent)] hover:underline">Other B2R Topics</Link>{" "}
@@ -49,6 +49,15 @@ export default function ZeroToRoot() {
               <Link href="/b2r/credential-attacks" className="text-[var(--accent)] hover:underline">Credential Attacks</Link>.
             </>
           }
+        />
+
+        <WalkthroughStep
+          step="Step 3b"
+          title="Look up known exploits"
+          why="Check for a known public exploit for the exact version found before trying manual techniques."
+          command="searchsploit SERVICE VERSION   # e.g. searchsploit apache 2.4.52"
+          expectedOutput={"Apache 2.4.49 - Path Traversal & RCE | multiple/webapps/50383.py"}
+          next="Hit found → read the exploit code before running it blindly. Nothing found → continue to Step 4."
         />
 
         <WalkthroughStep
@@ -61,10 +70,28 @@ export default function ZeroToRoot() {
         />
 
         <WalkthroughStep
-          step="Step 5a"
-          title="Pull and inspect a found backup"
+          step="Step 5a-i"
+          title="Download the found backup"
           why="Backup/config leaks are a classic easy-box credential source."
-          command={'curl -o backup.zip http://TARGET_IP/backup.zip && unzip backup.zip && grep -riE "password|secret|api_key" .'}
+          command="curl -o backup.zip http://TARGET_IP/backup.zip"
+          expectedOutput={"  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n100 18423  100 18423    0     0  91234      0 --:--:-- --:--:-- --:--:-- 91234"}
+          next="If the file is tiny/HTML, it's a 404 page not a real zip — go back to Step 4 and try a different found path."
+        />
+
+        <WalkthroughStep
+          step="Step 5a-ii"
+          title="Extract the backup"
+          why="Unpacks the archive so its files can be searched."
+          command="unzip backup.zip"
+          expectedOutput={"Archive:  backup.zip\n  inflating: config.php\n  inflating: index.php"}
+          next="Fails with 'not a zip file' → the curl step above downloaded an error page, not the real file."
+        />
+
+        <WalkthroughStep
+          step="Step 5a-iii"
+          title="Search the extracted files for credentials"
+          why="Hardcoded credentials in config files are the usual payoff."
+          command={'grep -riE "password|secret|api_key" .'}
           expectedOutput={"config.php:   $db_user = 'admin';\nconfig.php:   $db_pass = 'Sup3rSecret!';"}
           next="Step 6."
         />
