@@ -1,6 +1,12 @@
 {
-  "name": "ctf-arsenal-scaffold",
+  "name": "ctf-arsenal",
   "version": "0.1.0",
+  "description": "Offline-first Boot2Root & DFIR CTF reference manual",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyzyinfinity/CTFMCMC.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev -p 4300",

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Usage: ./start-ctf.sh [--lan] [--rebuild]   (default: bind 127.0.0.1 only)
+# Usage: ./scripts/start-ctf.sh [--lan] [--rebuild]   (default: bind 127.0.0.1 only)
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 DIR=out-build; PID=.ctf.pid; INFO=.ctf.info
 BIND=127.0.0.1; REBUILD=0
 for a in "$@"; do case $a in --lan) BIND=0.0.0.0;; --rebuild) REBUILD=1;; esac; done
