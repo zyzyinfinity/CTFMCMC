@@ -81,7 +81,7 @@ export default function TechniqueView({ technique }: { technique: Technique }) {
           {technique.commands.map((cmd, i) => (
             <div key={i} className="rounded-md border" style={{ borderColor: "var(--border)" }}>
               <div className="flex items-center justify-between gap-2 border-b px-3 py-2" style={{ borderColor: "var(--border)" }}>
-                <code className="text-xs text-[var(--text-dim)]">{cmd.syntax}</code>
+                <code className="min-w-0 flex-1 break-all text-xs text-[var(--text-dim)]">{cmd.syntax}</code>
                 <div className="flex shrink-0 gap-1.5">
                   {cmd.requiresRoot && <Badge tone="warn">root</Badge>}
                   {cmd.altersState && <Badge tone="danger">alters state</Badge>}

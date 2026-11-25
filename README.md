@@ -11,7 +11,7 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · Fuse.js (loc
 | Section | Categories |
 |---|---|
 | **B2R** | Enumeration · Web Exploitation · Initial Access · Linux PrivEsc · Windows PrivEsc · Credential Attacks · Other (FTP/SMB/DB, pivoting, Docker) |
-| **DFIR** | File · Network · Malware · Memory · Disk · Email · Log forensics · Incident Response |
+| **DFIR** | File · Network · Malware · Memory · Disk · Email · Log forensics · Archive Forensics · Encoding · Windows Artifacts · Document Forensics · Git Forensics · Incident Response |
 | **Mistakes** | Command Mistakes & Recovery notebook |
 
 Each technique: Concept → When to use → Workflow → Commands (flags, example, output, what to look for) → Tools → Findings → Next step → Troubleshooting.

@@ -18,6 +18,11 @@ export const dfirCategories: CategoryMeta[] = [
   { slug: "disk-forensics", title: "Disk & Filesystem Forensics", description: "Disk images, deleted file recovery, filesystem artifacts." },
   { slug: "email-forensics", title: "Email Forensics", description: "Headers, spoofing, phishing indicators." },
   { slug: "log-forensics", title: "Log & Timeline Forensics", description: "Auth logs, Windows events, timeline correlation." },
+  { slug: "archive-forensics", title: "Archive Forensics", description: "Archive ID by magic bytes, ZIP/RAR/7z password cracking, known-plaintext attacks, corrupted/split archives." },
+  { slug: "encoding", title: "Encoding & Decoding", description: "Base64/32/58/85, hex, XOR, compression, zero-width and whitespace stego, CyberChef." },
+  { slug: "windows-artifacts", title: "Windows Artifacts", description: "Registry hives, Prefetch, Amcache, Shimcache, Jump Lists, LNK, Recycle Bin, SRUM, ShellBags, scheduled tasks, RDP history." },
+  { slug: "document-forensics", title: "Document Forensics", description: "PDF/Office hidden objects, streams, redaction bypass, OOXML XML extraction, VBA macros, hidden sheets, embedded OLE objects." },
+  { slug: "git-forensics", title: "Git Forensics", description: "Exposed .git recovery, full-history search, deleted-file recovery, dangling objects, tags/stashes, manual object retrieval." },
   { slug: "incident-response", title: "Incident Response", description: "The IR lifecycle: prep through lessons learned." },
 ];
 

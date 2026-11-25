@@ -36,7 +36,8 @@ export default function Home() {
         >
           <h2 className="font-semibold">Digital Forensics & IR</h2>
           <p className="mt-1 text-sm text-[var(--text-dim)]">
-            File, network, malware, memory, disk, email and log forensics, plus IR methodology.
+            File, network, malware, memory, disk, email, log, archive, document, Windows artifact and Git forensics,
+            encoding/decoding, plus IR methodology.
           </p>
         </Link>
       </div>

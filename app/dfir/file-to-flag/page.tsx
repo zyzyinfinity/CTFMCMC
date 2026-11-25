@@ -70,6 +70,11 @@ export default function FileToFlag() {
               ["WAV/MP3/audio", "Condensed Audio chain below → audio-steganography"],
               [".eml/.msg", "Condensed Email chain below → email-header-phishing-analysis"],
               ["Plain text log", "Condensed Log chain below → linux-auth-log-analysis"],
+              [".git/HEAD, .git/ directory, or a Git dump/bundle", "Condensed Git chain below → detect-exposed-git"],
+              ["ZIP/RAR/7z archive (or wrong-extension archive)", "Condensed Archive chain below → identify-archive-type"],
+              ["PDF or Office document (.docx/.xlsx/.pptx/.doc/.xls/.ppt)", "Condensed Document chain below → pdf-hidden-objects-attachments / office-ooxml-extraction"],
+              ["Windows triage artifact (registry hive, .pf, .evtx, Amcache.hve, etc.)", "Condensed Windows chain below → registry-hive-analysis"],
+              ["Unidentified binary, no recognisable signature", "Condensed File chain below → file-signature-magic-bytes"],
             ].map(([what, go]) => (
               <tr key={what} className="border-b last:border-0" style={{ borderColor: "var(--border)" }}>
                 <td className="px-3 py-2">{what}</td>
@@ -194,6 +199,48 @@ export default function FileToFlag() {
             Linux Authentication Log Analysis
           </Link>
           .
+        </li>
+        <li>
+          <strong>Git:</strong> <code>curl -s -o /dev/null -w &apos;%{"{"}http_code{"}"}&apos; URL/.git/HEAD</code> to
+          confirm exposure, then{" "}
+          <Link href="/dfir/git-forensics/detect-exposed-git" className="text-[var(--accent)] hover:underline">
+            Git Forensics
+          </Link>{" "}
+          for dumping, full-history search, and recovering deleted/dangling commits.
+        </li>
+        <li>
+          <strong>Archive:</strong> <code>file FILE_PATH</code> to confirm the real archive type regardless of
+          extension, then{" "}
+          <Link href="/dfir/archive-forensics/identify-archive-type" className="text-[var(--accent)] hover:underline">
+            Archive Forensics
+          </Link>{" "}
+          for password cracking, known-plaintext attacks, and corrupted/split/nested archives.
+        </li>
+        <li>
+          <strong>Document (PDF/Office):</strong> per{" "}
+          <Link href="/dfir/document-forensics/pdf-hidden-objects-attachments" className="text-[var(--accent)] hover:underline">
+            PDF Hidden Objects & Attachments
+          </Link>{" "}
+          or{" "}
+          <Link href="/dfir/document-forensics/office-ooxml-extraction" className="text-[var(--accent)] hover:underline">
+            DOCX/XLSX/PPTX XML Extraction
+          </Link>
+          , then VBA macro analysis if the file is macro-enabled.
+        </li>
+        <li>
+          <strong>Unidentified binary:</strong> confirm there really is no recognisable signature with{" "}
+          <Link href="/dfir/file-forensics/file-signature-magic-bytes" className="text-[var(--accent)] hover:underline">
+            File Signature Identification & Magic Bytes
+          </Link>{" "}
+          before assuming it&apos;s a one-off format.
+        </li>
+        <li>
+          <strong>Windows artifacts:</strong> per{" "}
+          <Link href="/dfir/windows-artifacts/registry-hive-analysis" className="text-[var(--accent)] hover:underline">
+            Windows Artifacts
+          </Link>{" "}
+          — registry hives, Prefetch, Amcache, Shimcache, Jump Lists/LNK, Recycle Bin, SRUM, ShellBags, scheduled
+          tasks, RDP history.
         </li>
       </ul>
 
